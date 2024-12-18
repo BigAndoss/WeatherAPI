@@ -2,30 +2,35 @@ import mongoose from "mongoose";
 
 const weatherSchema = new mongoose.Schema({
   city: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "City", // Reference to the 'City' model
+    type: mongoose.Schema.Types.ObjectId, // Reference to City model
+    ref: "City",
     required: true,
   },
+  date: {
+    type: Date,
+    required: true,
+    default: Date.now, // Defaults to current date if not provided
+  },
   temperature: {
-    type: Number, // Temperature in Celsius, for example
+    type: Number, // Temperature in Celsius
     required: true,
   },
   humidity: {
-    type: Number, // Percentage
-    required: false,
+    type: Number, // Humidity as a percentage
+    required: true,
+    min: 0,
+    max: 100,
   },
   windSpeed: {
     type: Number, // Wind speed in km/h
-    required: false,
+    required: true,
+    min: 0,
   },
   condition: {
     type: String, // e.g., 'Sunny', 'Cloudy', 'Rainy'
+    enum: ["Sunny", "Rainy", "Cloudy", "Snowy", "Windy", "Stormy", "Foggy"], // Allowed values  
     required: false
-  },
-  recordedAt: {
-    type: Date,
-    default: Date.now,
-  },
+  }
 });
 
 const Weather = mongoose.model("Weather", weatherSchema);

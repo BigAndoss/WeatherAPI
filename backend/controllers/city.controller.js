@@ -1,6 +1,38 @@
 import City from "../models/city.model.js";
 import mongoose from "mongoose";
 
+// GET - Search for a city by name and country
+export const getCityByNameAndCountry = async (req, res) => {
+    try {
+      const { name, country } = req.query; // Extract query parameters
+  
+      // Validate that both parameters are provided
+      if (!name || !country) {
+        return res.status(400).json({
+          message: "Both 'name' and 'country' parameters are required to search.",
+        });
+      }
+  
+      // Query to search for the city
+      const city = await City.findOne({
+        name: { $regex: new RegExp(name, "i") }, // Case-insensitive search for city name
+        "country.name": { $regex: new RegExp(country, "i") }, // Case-insensitive search for country name
+      });
+  
+      if (!city) {
+        return res.status(404).json({
+          message: `No city found with name '${name}' in country '${country}'.`,
+        });
+      }
+  
+      // Return the matching city
+      res.status(200).json(city);
+    } catch (error) {
+      console.error("Error fetching city:", error.message);
+      res.status(500).json({ message: "Server error" });
+    }
+  };
+
 export const getCity = async (req, res) => {
     try {
       const cities = await City.find({});
