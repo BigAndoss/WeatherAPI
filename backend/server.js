@@ -7,7 +7,7 @@ import weatherRoutes from './routes/weather.route.js';
 dotenv.config();
 
 const app = express();
-
+const PORT = process.env.PORT || 3000;
 // Middleware to parse JSON data
 app.use(express.json());
 
@@ -15,7 +15,7 @@ app.use('/api/cities', cityRoutes)
 app.use('/api/weather', weatherRoutes)
 
 // Start the server
-app.listen(3000, () => {
+app.listen(PORT, () => {
   connectDB(); // Connect to MongoDB before starting the server
-  console.log(`Server started at http://localhost:3000`);
+  console.log(`Server started at http://localhost:${PORT}`);
 });

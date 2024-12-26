@@ -1,9 +1,23 @@
 import express from 'express';
-import { getAllWeather, getWeatherByCityName, getWeatherByCityId, getWeatherById, createWeather, updateWeather, deleteWeather } from '../controllers/weather.contoller.js';
+import { 
+    getAllWeather, 
+    getWeatherByCityCountryAndDate, 
+    getWeatherByCityName, 
+    getWeatherByCityId, 
+    getWeatherById, 
+    createWeather, 
+    updateWeather, 
+    deleteWeather,
+    getWeatherForThreeDays
+} from '../controllers/weather.contoller.js';
 
 const router = express.Router();
 
 router.get('/', getAllWeather);
+
+router.get("/search", getWeatherByCityCountryAndDate);
+
+router.get("/three-days", getWeatherForThreeDays);
 
 router.get("/city/:cityId", getWeatherByCityId);
 
