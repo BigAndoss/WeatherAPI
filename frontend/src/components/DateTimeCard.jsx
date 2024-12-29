@@ -6,7 +6,7 @@ const DateTimeCard = () => {
       width={300}
       height={100}
       bgColor={"whiteAlpha.600"}
-      borderRadius={15}
+      rounded={"2xl"}
       textAlign={"center"}
       color={"rgba(60,60,60)"}
       fontWeight={"bold"}

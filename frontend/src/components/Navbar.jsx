@@ -12,7 +12,7 @@ const Navbar = () => {
         justifyContent={"space-between"}
         flexDir={{ base: "column", sm: "row" }}
       >
-        <Link to={"/"}>
+        <Link href={"/"}>
         <Text
           fontSize={{ base: 22, sm: 28 }}
           fontWeight="extrabold"
@@ -24,7 +24,7 @@ const Navbar = () => {
         </Text>
             <TiWeatherPartlySunny size={50} color="rgba(246, 172, 0, 0.84)" />
           </Link>
-        <Box textAlign="center">
+        {/* <Box textAlign="center">
           <Text
             color="transparent"
             bgGradient="linear-gradient(to left, #7928CA, #FF0080)"
@@ -34,8 +34,7 @@ const Navbar = () => {
           >
             Gradient Text
           </Text>
-          <h1>{import.meta.env.VITE_PORT}</h1>
-        </Box>
+        </Box> */}
       </Flex>
     </Container>
   );

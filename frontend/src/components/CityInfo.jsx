@@ -22,16 +22,16 @@ const CityInfo = () => {
             <Flex
               alignItems={"center"}
               justifyContent={"center"}
-              flexDir={{ base: "column", sm: "row" }}
+              flexDir={"row"}
             >
-              <Image src="/animated/cloudy-day-2.svg" boxSize={"200px"}></Image>
+              <Image src="/animated/snowy-6.svg" boxSize={"200px"}></Image>
               <Text
                 textAlign={"center"}
                 color={"rgba(60,60,150)"}
                 fontWeight={"bold"}
                 fontSize={"40px"}
               >
-                20°c
+                -1°c
               </Text>
             </Flex>
           </Box>
