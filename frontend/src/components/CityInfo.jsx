@@ -1,7 +1,7 @@
 import React from 'react'
 import {Container, Flex, Text, Box, Image} from '@chakra-ui/react'
 import DateTimeCard from './DateTimeCard'
-const CityInfo = () => {
+const CityInfo = ({ time, day, date, month, year }) => {
   return (
     <Container
           alignItems={"center"}
@@ -35,7 +35,7 @@ const CityInfo = () => {
               </Text>
             </Flex>
           </Box>
-          <DateTimeCard/>
+          <DateTimeCard time={time} day={day} date={date} month={month} year={year}/>
         </Container>
 )
 }

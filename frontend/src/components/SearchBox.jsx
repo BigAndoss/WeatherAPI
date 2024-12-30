@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "@chakra-ui/react";
 
-const SearchBox = () => {
+const SearchBox = ({ time, date, month, year }) => {
   return (
     <Input
       placeholder="Enter a City Name 🔍"

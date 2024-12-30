@@ -5,7 +5,7 @@ import React from "react";
 
 const Navbar = () => {
   return (
-    <Container  px={4} bgColor={"rgba(255, 216, 216, 0.09)"}  borderRadius={50}>
+    <Container  px={4}   borderRadius={50}>
       <Flex
         h={16}
         alignItems={"center"}

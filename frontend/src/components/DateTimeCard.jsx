@@ -1,6 +1,7 @@
 import React from "react";
-import { Box,Flex,Text } from "@chakra-ui/react";
-const DateTimeCard = () => {
+import { Box, Flex, Text } from "@chakra-ui/react";
+
+const DateTimeCard = ({ time, day, date, month, year }) => {
   return (
     <Box
       width={300}
@@ -17,14 +18,14 @@ const DateTimeCard = () => {
         justifyContent={"space-evenly"}
         paddingTop={3}
       >
-        <Text fontSize={50}>13:00</Text>
+        <Text fontSize={50}>{time}</Text>
         <Box direction={"row"}>
-          <Text>Wednesday</Text>
+          <Text>{day}</Text>
           <Flex width={100} justifyContent={"space-between"}>
-            <Text>30 </Text>
-            <Text> December</Text>
+            <Text>{date}</Text>
+            <Text>{month}</Text>
           </Flex>
-          <Text>2024</Text>
+          <Text>{year}</Text>
         </Box>
       </Flex>
     </Box>
