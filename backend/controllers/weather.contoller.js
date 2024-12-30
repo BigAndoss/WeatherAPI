@@ -1,6 +1,71 @@
 import Weather from "../models/weather.model.js";
 import City from "../models/city.model.js";
 
+
+
+
+export const getWeatherByCityAndDate = async (req, res) => {
+  try {
+    const { cityName, date } = req.query;
+
+    // Validate the parameters
+    if (!cityName || !date) {
+      return res.status(400).json({
+        message: "City name and date are required.",
+      });
+    }
+
+    // Convert user-provided date to a Date object
+    const queryDate = new Date(date);
+    if (isNaN(queryDate)) {
+      return res.status(400).json({ message: "Invalid date format." });
+    }
+
+    // Create a date range for the entire day
+    const startOfDay = new Date(queryDate.setUTCHours(0, 0, 0, 0));
+    const endOfDay = new Date(queryDate.setUTCHours(23, 59, 59, 999));
+
+    // Step 1: Find the city by name (country is no longer required)
+    const city = await City.findOne({
+      name: { $regex: new RegExp(cityName, "i") },
+    });
+
+    if (!city) {
+      return res.status(404).json({
+        message: `City '${cityName}' not found.`,
+      });
+    }
+
+    // Step 2: Find weather data for the specific date range
+    const weatherData = await Weather.findOne({
+      city: city._id,
+      date: { $gte: startOfDay, $lt: endOfDay }, // Match the date range
+    });
+
+    if (!weatherData) {
+      return res.status(404).json({
+        message: `No weather data found for city '${cityName}' on date '${date}'.`,
+      });
+    }
+
+    // Step 3: Return the weather data
+    res.status(200).json({
+      city: city.name,
+      country: city.country.name,  // Still include country as part of the data
+      date: weatherData.date,
+      temperature: weatherData.temperature,
+      humidity: weatherData.humidity,
+      windSpeed: weatherData.windSpeed,
+      condition: weatherData.condition,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
+
 export const getWeatherForThreeDays = async (req, res) => {
   try {
     const { cityName, countryName, date } = req.query;

@@ -8,12 +8,15 @@ import {
     createWeather, 
     updateWeather, 
     deleteWeather,
-    getWeatherForThreeDays
+    getWeatherForThreeDays,
+    getWeatherByCityAndDate
 } from '../controllers/weather.contoller.js';
 
 const router = express.Router();
 
 router.get('/', getAllWeather);
+
+router.get('/citynow', getWeatherByCityAndDate);
 
 router.get("/search", getWeatherByCityCountryAndDate);
 
