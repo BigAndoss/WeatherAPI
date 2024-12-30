@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import cityRoutes from './routes/city.route.js';
 import weatherRoutes from './routes/weather.route.js';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -10,6 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Middleware to parse JSON data
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" })); // Allow requests from frontend
+
 
 app.use('/api/cities', cityRoutes)
 app.use('/api/weather', weatherRoutes)
