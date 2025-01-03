@@ -1,9 +1,6 @@
 import Weather from "../models/weather.model.js";
 import City from "../models/city.model.js";
 
-
-
-
 export const getWeatherByCityAndDate = async (req, res) => {
   try {
     const { cityName, date } = req.query;
@@ -15,17 +12,14 @@ export const getWeatherByCityAndDate = async (req, res) => {
       });
     }
 
-    // Convert user-provided date to a Date object
     const queryDate = new Date(date);
     if (isNaN(queryDate)) {
       return res.status(400).json({ message: "Invalid date format." });
     }
 
-    // Create a date range for the entire day
     const startOfDay = new Date(queryDate.setUTCHours(0, 0, 0, 0));
     const endOfDay = new Date(queryDate.setUTCHours(23, 59, 59, 999));
 
-    // Step 1: Find the city by name (country is no longer required)
     const city = await City.findOne({
       name: { $regex: new RegExp(cityName, "i") },
     });
@@ -36,10 +30,9 @@ export const getWeatherByCityAndDate = async (req, res) => {
       });
     }
 
-    // Step 2: Find weather data for the specific date range
     const weatherData = await Weather.findOne({
       city: city._id,
-      date: { $gte: startOfDay, $lt: endOfDay }, // Match the date range
+      date: { $gte: startOfDay, $lt: endOfDay },
     });
 
     if (!weatherData) {
@@ -48,23 +41,16 @@ export const getWeatherByCityAndDate = async (req, res) => {
       });
     }
 
-    // Step 3: Return the weather data
     res.status(200).json({
       city: city.name,
-      country: city.country.name,  // Still include country as part of the data
       date: weatherData.date,
       temperature: weatherData.temperature,
-      humidity: weatherData.humidity,
-      windSpeed: weatherData.windSpeed,
       condition: weatherData.condition,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
 
 export const getWeatherForThreeDays = async (req, res) => {
   try {
@@ -199,22 +185,35 @@ export const getWeatherByCityName = async (req, res) => {
     }
 
     // Step 1: Find the city by name
-    const city = await City.findOne({ name: { $regex: new RegExp(cityName, "i") } });
+    const city = await City.findOne({
+      name: { $regex: new RegExp(cityName, "i") }
+    }).select('_id name');
+// console.log(city.id);
+const cityId = city.id;
+
+// console.log(cityId);
+
     if (!city) {
       return res.status(404).json({ message: `City '${cityName}' not found.` });
     }
 
     // Step 2: Find weather data using the city's ID
-    const weatherData = await Weather.find({ city: city._id });
+    const weatherData = await Weather.find({ city: "6756b29cf6968f6e71bbbcfb"});
+    
+    console.log(weatherData);
+
+    // const weatherDataa = await Weather.find({city:"6756b29cf6968f6e71bbbcfb"});
+    // console.log(weatherDataa);
 
     if (weatherData.length === 0) {
-      return res.status(404).json({ message: `No weather data found for city '${cityName}'.` });
+      return res
+        .status(404)
+        .json({ message: `No weather data found for city '${cityName}'.` });
     }
 
     // Step 3: Respond with weather data
     res.status(200).json({
       city: city.name,
-      country: city.country.name,
       weather: weatherData,
     });
   } catch (error) {
@@ -223,6 +222,47 @@ export const getWeatherByCityName = async (req, res) => {
 };
 
 // GET all weather records
+
+// try {
+//   const { cityName } = req.query;
+
+//       // Validate cityName parameter
+//       if (!cityName) {
+//         return res.status(400).json({ message: "City name is required." });
+//       }
+  
+//       // Step 1: Find the city by name
+//       const city = await City.findOne({
+//         name: { $regex: new RegExp(cityName, "i") }
+//       }).select('_id name');
+//   console.log(city);
+//   console.log('City:', city); // Verify city object
+//   console.log('City ID:', city._id); // Verify city ID
+  
+//   // Check if any weather documents exist for this city
+//   const allWeather = await Weather.find({});
+//   // console.log('All weather documents:', allWeather);
+  
+//   // Compare the ID types
+//   const weatherData = await Weather.find({ 
+//     city: mongoose.Types.ObjectId(city._id)
+//   });
+  
+//   // console.log('Weather Data:', weatherData);
+  
+//   if (!weatherData.length) {
+//     return res.status(404).json({ message: 'No weather data found for this city' });
+//   }
+
+//   res.json(weatherData);
+// } catch (error) {
+//   console.error('Error:', error);
+//   res.status(500).json({ message: 'Server error' });
+// }
+// };
+
+
+
 export const getAllWeather = async (req, res) => {
   try {
     const weatherData = await Weather.find().populate("city", "name country");
@@ -234,33 +274,57 @@ export const getAllWeather = async (req, res) => {
 
 // GET - Search Weather Data by City ID
 export const getWeatherByCityId = async (req, res) => {
-    try {
-      const { cityId } = req.params;
-  
-      // Validate city ID format
-      if (!cityId) {
-        return res.status(400).json({ message: "City ID is required" });
-      }
-  
-      // Query weather records for the given city ID
-      const weatherData = await Weather.find({ city: cityId });
-  
-      if (weatherData.length === 0) {
-        return res.status(404).json({ message: "No weather data found for the given city ID" });
-      }
-  
-      res.status(200).json(weatherData);
-    } catch (error) {
-      res.status(500).json({ message: "Server error" });
+  try {
+    const { cityId } = req.params;
+
+    // Validate city ID format
+    if (!cityId) {
+      return res.status(400).json({ message: "City ID is required" });
     }
-  };
+
+    // Query weather records for the given city ID
+    const weatherData = await Weather.find({ city: cityId });
+
+    if (weatherData.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No weather data found for the given city ID" });
+    }
+
+    res.status(200).json(weatherData);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 // GET weather record by ID
 export const getWeatherById = async (req, res) => {
   try {
     const weather = await Weather.findById(req.params.id).populate("city");
-    if (!weather) return res.status(404).json({ message: "Weather record not found" });
+    if (!weather)
+      return res.status(404).json({ message: "Weather record not found" });
     res.status(200).json(weather);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const weatherCity = async (req, res) => {
+  try {
+    const { city } = req.params;
+    console.log(city);
+    const cityId = await City.findOne({
+      name: { $regex: new RegExp(city, "i") }
+    }).select('_id name');
+console.log(cityId.id);
+// const cityId = city.id;
+    
+    const weatherData = await Weather.findOne({ city:"6756b29cf6968f6e71bbbcfb"});
+    console.log(weatherData);
+    if (weatherData.length === 0) {
+      return res.status(404).json({ message: "No weather data found" });
+    }
+    res.status(200).json(weatherData);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -269,7 +333,8 @@ export const getWeatherById = async (req, res) => {
 // POST create a new weather record
 export const createWeather = async (req, res) => {
   try {
-    const { city, date, temperature, humidity, windSpeed, condition } = req.body;
+    const { city, date, temperature, humidity, windSpeed, condition } =
+      req.body;
     const newWeather = new Weather({
       city,
       date,
@@ -281,7 +346,9 @@ export const createWeather = async (req, res) => {
     const savedWeather = await newWeather.save();
     res.status(201).json(savedWeather);
   } catch (error) {
-    res.status(500).json({ message: "Error creating weather record", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error creating weather record", error: error.message });
   }
 };
 
@@ -294,10 +361,13 @@ export const updateWeather = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    if (!updatedWeather) return res.status(404).json({ message: "Weather record not found" });
+    if (!updatedWeather)
+      return res.status(404).json({ message: "Weather record not found" });
     res.status(200).json(updatedWeather);
   } catch (error) {
-    res.status(500).json({ message: "Error updating weather record", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating weather record", error: error.message });
   }
 };
 
@@ -305,9 +375,12 @@ export const updateWeather = async (req, res) => {
 export const deleteWeather = async (req, res) => {
   try {
     const deletedWeather = await Weather.findByIdAndDelete(req.params.id);
-    if (!deletedWeather) return res.status(404).json({ message: "Weather record not found" });
+    if (!deletedWeather)
+      return res.status(404).json({ message: "Weather record not found" });
     res.status(200).json({ message: "Weather record deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting weather record", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting weather record", error: error.message });
   }
 };

@@ -9,7 +9,8 @@ import {
     updateWeather, 
     deleteWeather,
     getWeatherForThreeDays,
-    getWeatherByCityAndDate
+    getWeatherByCityAndDate,
+    weatherCity
 } from '../controllers/weather.contoller.js';
 
 const router = express.Router();
@@ -25,8 +26,9 @@ router.get("/three-days", getWeatherForThreeDays);
 router.get("/city/:cityId", getWeatherByCityId);
 
 router.get("/city", getWeatherByCityName);
+router.get("/:city", weatherCity);
 
-router.get('/:id', getWeatherById);
+// router.get('/:id', getWeatherById);
 
 // POST request to add a new city
 router.post('/', createWeather);
