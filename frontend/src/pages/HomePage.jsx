@@ -6,6 +6,7 @@ import { format } from 'date-fns';
 
 
 const HomePage = () => {
+
   const now = new Date();
   const time = format(now, "HH:mm");
   const day = format(now, "EEEE");
@@ -25,7 +26,7 @@ const HomePage = () => {
     >
       <SearchBox time={time} date={date} month={month} year={year} />
       <Flex>
-        <CityInfo time={time} day={day} date={date} month={month} year={year} />
+        <CityInfo time={time} day={day} date={date} month={month} year={year}  />
       </Flex>
     </Flex>
   </Container>

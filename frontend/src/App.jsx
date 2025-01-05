@@ -4,7 +4,6 @@ import CreatePage  from "./pages/CreatePage";
 import  HomePage from "./pages/HomePage";
 import Navbar  from "./components/Navbar";
 
-
 function App() {
 
   return (
