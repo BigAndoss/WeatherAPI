@@ -21,7 +21,7 @@ const DateTimeCard = ({ time, day, date, month, year }) => {
         <Text fontSize={50}>{time}</Text>
         <Box direction={"row"}>
           <Text>{day}</Text>
-          <Flex width={100} justifyContent={"space-between"}>
+          <Flex width={100} justifyContent={"space-evenly"}>
             <Text>{date}</Text>
             <Text>{month}</Text>
           </Flex>

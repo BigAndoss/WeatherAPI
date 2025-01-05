@@ -1,21 +1,26 @@
 import React from 'react'
 import {Container, Flex, Text, Box, Image} from '@chakra-ui/react'
 import DateTimeCard from './DateTimeCard'
+import { useWeatherStore } from "../store/weather.shared.js";
+
 const CityInfo = ({ time, day, date, month, year }) => {
+  const city = useWeatherStore((state) => state.city);
+  
   return (
     <Container
           alignItems={"center"}
           justifyContent={"center"}
           justifyItems={"center"}
         >
-          <Text
+          <Text 
+            className='city-name'
             marginTop={10}
             textAlign={"center"}
             color={"rgba(60,60,60)"}
             fontWeight={"bold"}
             fontSize={"60px"}
           >
-            Ferizaj
+            {city}
           </Text>
 
           <Box width={400} height={200}>
