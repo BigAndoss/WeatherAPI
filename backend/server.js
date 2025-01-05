@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import cityRoutes from './routes/city.route.js';
 import weatherRoutes from './routes/weather.route.js';
+import weatherInfoRoutes from './routes/weatherInfo.route.js';
 
 dotenv.config();
 
