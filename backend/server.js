@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
 import cityRoutes from './routes/city.route.js';
@@ -10,6 +11,21 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT ;
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000, // Limit based on environment
+  message: {
+    status: 429,
+    message: "Too many requests, please try again later."
+  },
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
+app.use(limiter);
+ 
+
 // Middleware to parse JSON data
 app.use(express.json());
 
