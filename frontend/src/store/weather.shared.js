@@ -26,6 +26,19 @@ export const useWeatherStore = create((set, get) => ({
             set({ isLoading: false });
             throw error;
         }
+    },
+    getWeatherByDate: async (date) => {
+        set({ isLoading: true });
+        try {
+            const city = get().city;
+            const response = await fetch(`/api/weather/citynow?city=${city}&date=${date}`);
+            const data = await response.json();
+            set({ weatherData: data, isLoading: false })
+            return data;
+        } catch (error) {
+            set({ isLoading: false });
+            throw error;
+        }
     }
 }));
 

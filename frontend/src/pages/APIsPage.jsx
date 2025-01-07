@@ -2,42 +2,29 @@ import React from 'react'
 import { useToast } from "@chakra-ui/toast";
 import { Container, Flex, Text, Box, Link, Button } from "@chakra-ui/react";
 import { Toaster, toaster } from "@/components/ui/toaster"
+import SearchBox from "@/components/SearchBox"
+import CityInfo from "@/components/CityInfo"
 
-function ToastExample() {
 
 
-  return (
-    <Button
-      onClick={() =>
-        toast({
-          title: "Account created.",
-          description: "We've created your account for you.",
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        })
-      }
-    >
-      Show Toast
-    </Button>
-  )
-}
 const APIsPage = () => {
 
-  const toast = useToast()
-
-  const showToast = () => {
-    toast({
-      title: "Account created.",
-      description: "We've created your account for you.",
-      status: "success",
-      duration: 9000,
-      isClosable: true,
-    })
-  }
   return (
-    <div>APIsPage
-      <Button
+
+       <Container>
+       <Flex
+         h={"80vh"}
+         alignItems={"center"}
+         justifyContent={"center"}
+         justifyItems={"center"}
+         flexDir={"column"}
+       >
+         <SearchBox />
+         <Flex>
+           <CityInfo />
+           
+         </Flex>
+         <Button
       onClick={() =>
         toaster.create({
           title: "File saved",
@@ -47,7 +34,8 @@ const APIsPage = () => {
         })}
       >Click me</Button>
       <Toaster />
-    </div>
+       </Flex>
+     </Container>
     
   )
 }

@@ -1,13 +1,20 @@
-import React, { useEffect, useCallback } from 'react';
-import { Container, Flex, Text, Box, Image } from '@chakra-ui/react';
-import DateTimeCard from './DateTimeCard';
-import { useWeatherStore } from '../store/weather.shared';
+import React, { useEffect, useCallback } from "react";
+import { Container, Flex, Text, Box, Image } from "@chakra-ui/react";
+import DateTimeCard from "./DateTimeCard";
+import { useWeatherStore } from "../store/weather.shared";
+import { format } from "date-fns";
 
-const CityInfo = ({time,day,date,month,year}) => {
+const CityInfo = () => {
   // Use single selector to avoid multiple store subscriptions
-  const weatherData = useWeatherStore(state => state.weatherData);
-  const isLoading = useWeatherStore(state => state.isLoading);
-  const getWeather = useWeatherStore(state => state.getWeather);
+  const weatherData = useWeatherStore((state) => state.weatherData);
+  const isLoading = useWeatherStore((state) => state.isLoading);
+  const getWeather = useWeatherStore((state) => state.getWeather);
+  const now = new Date();
+  const time = format(now, "HH:mm");
+  const day = format(now, "EEEE");
+  const date = format(now, "dd");
+  const month = format(now, "MMMM");
+  const year = format(now, "yyyy");
 
   // Memoize the fetch call
   const fetchWeather = useCallback(async () => {
@@ -23,9 +30,13 @@ const CityInfo = ({time,day,date,month,year}) => {
   }
 
   return (
-    <Container alignItems={"center"} justifyContent={"center"} justifyItems={"center"}>
+    <Container
+      alignItems={"center"}
+      justifyContent={"center"}
+      justifyItems={"center"}
+    >
       <Text
-        className='city-name'
+        className="city-name"
         marginTop={10}
         textAlign={"center"}
         color={"rgba(60,60,60)"}
@@ -37,7 +48,10 @@ const CityInfo = ({time,day,date,month,year}) => {
 
       <Box width={400} height={200}>
         <Flex alignItems={"center"} justifyContent={"center"} flexDir={"row"}>
-          <Image src={`/animated/${weatherData?.condition}.svg`}  boxSize={"200px"}></Image>
+          <Image
+            src={`/animated/${weatherData?.condition}.svg`}
+            boxSize={"200px"}
+          ></Image>
           <Text
             textAlign={"center"}
             color={"rgba(60,60,150)"}
@@ -48,7 +62,13 @@ const CityInfo = ({time,day,date,month,year}) => {
           </Text>
         </Flex>
       </Box>
-      <DateTimeCard time={time} day={day} date={date} month={month} year={year} />
+      <DateTimeCard
+        time={time}
+        day={day}
+        date={date}
+        month={month}
+        year={year}
+      />
     </Container>
   );
 };
