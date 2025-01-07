@@ -42,11 +42,11 @@ const APIsPage = () => {
         toaster.create({
           title: "File saved",
           description: "File saved successfully",
-          type: "success",
+          type: "warning",
           duration: 3500,
         })}
       >Click me</Button>
-
+      <Toaster />
     </div>
     
   )

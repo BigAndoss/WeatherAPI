@@ -3,5 +3,7 @@ export const auth0Config = {
   clientId: "Y6lPMAC9Ic91lrWdvGOnuoWfeDezPx0i",
   authorizationParams: {
     redirect_uri: "http://localhost:5173/APIs"
-  }
+  },
+  cacheLocation: "localstorage",
+  useRefreshTokens: true
 };
