@@ -1,56 +1,90 @@
 import { Container, Flex, Text, Box, Link, Button } from "@chakra-ui/react";
 import { TiWeatherPartlySunny } from "react-icons/ti";
-import { useAuth0 } from '@auth0/auth0-react';
-
-
+import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
+import { Toaster, toaster } from "@/components/ui/toaster"
+
 
 const Navbar = () => {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
   return (
-    <Container  px={4}   borderRadius={50}>
+    <Container px={4} borderRadius={50}>
       <Flex
-        h={16}
+        h={{ base: 16, sm: 20 }}
         alignItems={"center"}
         justifyContent={"space-between"}
         flexDir={{ base: "column", sm: "row" }}
       >
-        <Link href={"/"}>
-        <Text
-          fontSize={{ base: 22, sm: 28 }}
-          fontWeight="extrabold"
-          textAlign={"center"}
-          bgGradient="linear-gradient(to left,rgba(255, 179, 0, 0.84),rgba(0, 136, 255, 0.76))"
-          bgClip="text"
-        >
-            Weather App
-        </Text>
+        <Box width={300}>
+          <Link href={"/"}>
+            <Text
+              fontSize={{ base: 22, sm: 28 }}
+              fontWeight="extrabold"
+              textAlign={"center"}
+              bgGradient="linear-gradient(to left,rgba(255, 179, 0, 0.84),rgba(0, 136, 255, 0.76))"
+              bgClip="text"
+            >
+              Weather App
+            </Text>
             <TiWeatherPartlySunny size={50} color="rgba(246, 172, 0, 0.84)" />
           </Link>
-        <Box textAlign="center">
-          <Link href="/APIs">
-          <Text
-            color="transparent"
-            bgGradient="linear-gradient(to left, #7928CA, #FF0080)"
-            bgClip="text"
-            fontSize={{ base: 22, sm: 28 }}
-            fontWeight="extrabold"
+        </Box>
+        <Box textAlign="center" width={300}>
+          {isAuthenticated ? (
+
+                        <Link href={"/APIs"}
+                        bgGradient="linear-gradient(to left, rgba(0, 136, 255, 0.76), rgba(255, 179, 0, 0.84))"
+                        bgClip="text"
+                        fontSize={{ base: 22, sm: 28 }}
+                        fontWeight="extrabold"
+                      >
+                        Try more APIs
+                      </Link>
+          ) : (
+            <Button
+              bgGradient="linear-gradient(to left, rgba(0, 136, 255, 0.76), rgba(255, 179, 0, 0.84))"
+              bgClip="text"
+              fontSize={{ base: 22, sm: 28 }}
+              fontWeight="extrabold"
+              onClick={() =>
+                      toaster.create({
+                        title: "Log In",
+                        description: "You Must Log In",
+                        type: "error",
+                        duration: 3500,
+                      })}
             >
-            Gradient Text
-          </Text>
-            </Link>
+              Try more APIs
+              <Toaster />
+            </Button>
+          )}
         </Box>
         <Box textAlign="center">
           {isAuthenticated ? (
-            <Button onClick={() => logout()}>
+            <Button
+              onClick={() => logout()}
+              fontSize={{ base: 20, sm: 26 }}
+              fontWeight="extrabold"
+              color={"gray.600"}
+              bg={"transparent"}
+              width={300}
+            >
               Log Out
             </Button>
           ) : (
-            <Button onClick={() => loginWithRedirect()}>
-              Log In
+            <Button
+              onClick={() => loginWithRedirect()}
+              fontSize={{ base: 20, sm: 26 }}
+              fontWeight="extrabold"
+              color={"gray.600"}
+              bg={"transparent"}
+              width={300}
+            >
+              <Text>Log In</Text>
             </Button>
           )}
+    
         </Box>
       </Flex>
     </Container>
