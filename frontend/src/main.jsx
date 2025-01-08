@@ -37,7 +37,7 @@ createRoot(document.getElementById("root")).render(
       domain="dev-ard7b0jon01tru7s.us.auth0.com"
       clientId="Y6lPMAC9Ic91lrWdvGOnuoWfeDezPx0i"
       authorizationParams={{
-        redirect_uri: "https://weatherapi-pxm4.onrender.com/"
+        redirect_uri: "https://weatherapi-pxm4.onrender.com/APIs",
       }}
       cacheLocation="localstorage"
     >
