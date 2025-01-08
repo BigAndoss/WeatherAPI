@@ -52,7 +52,7 @@ export const useWeatherStore = create((set, get) => ({
             const response = await fetch(`/api/weather/country?country=${country}&date=${currentDate}`);
             const data = await response.json();
             set({ weatherData: data, isLoading: false })
-            // console.log(data);
+            console.log(data);
             return data;
         } catch (error) {
             set({ isLoading: false });

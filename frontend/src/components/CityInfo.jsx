@@ -2,8 +2,16 @@ import React, { useEffect, useCallback } from "react";
 import { Container, Flex, Text, Box, Image } from "@chakra-ui/react";
 import DateTimeCard from "./DateTimeCard";
 
-const CityInfo = ({ weatherData, isLoading, getWeather, time, day, month,year, date }) => {
-
+const CityInfo = ({
+  weatherData,
+  isLoading,
+  getWeather,
+  time,
+  day,
+  month,
+  year,
+  date,
+}) => {
   // Memoize the fetch call
   const fetchWeather = useCallback(async () => {
     await getWeather();
@@ -34,28 +42,32 @@ const CityInfo = ({ weatherData, isLoading, getWeather, time, day, month,year, d
         {weatherData.city}
       </Text>
       <Text
-      textAlign={"center"}
-      color={"rgba(60,60,60)"}
-      fontWeight={"bold"}
-      fontSize={"20px"}
+        textAlign={"center"}
+        color={"rgba(60,60,60)"}
+        fontWeight={"bold"}
+        fontSize={"20px"}
       >
-                {weatherData.country}
-
+        {weatherData.country}
       </Text>
 
       <Box width={400} height={200}>
         <Flex alignItems={"center"} justifyContent={"center"} flexDir={"row"}>
-          <Image
-            src={`/animated/${weatherData?.condition}.svg`}
-            boxSize={"200px"}
-          ></Image>
+          {weatherData?.condition && (
+            <Image
+              src={`/animated/${weatherData?.condition}.svg`}
+              boxSize={"200px"}
+            ></Image>
+          )}
+
           <Text
             textAlign={"center"}
             color={"rgba(60,60,150)"}
             fontWeight={"bold"}
             fontSize={"40px"}
           >
-            {weatherData.temperature}°c
+            {weatherData?.temperature
+              ? `${weatherData.temperature}°c`
+              : "No data was found"}
           </Text>
         </Flex>
       </Box>
