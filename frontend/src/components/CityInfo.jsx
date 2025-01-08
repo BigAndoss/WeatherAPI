@@ -1,20 +1,8 @@
 import React, { useEffect, useCallback } from "react";
 import { Container, Flex, Text, Box, Image } from "@chakra-ui/react";
 import DateTimeCard from "./DateTimeCard";
-import { useWeatherStore } from "../store/weather.shared";
-import { format } from "date-fns";
 
-const CityInfo = () => {
-  // Use single selector to avoid multiple store subscriptions
-  const weatherData = useWeatherStore((state) => state.weatherData);
-  const isLoading = useWeatherStore((state) => state.isLoading);
-  const getWeather = useWeatherStore((state) => state.getWeather);
-  const now = new Date();
-  const time = format(now, "HH:mm");
-  const day = format(now, "EEEE");
-  const date = format(now, "dd");
-  const month = format(now, "MMMM");
-  const year = format(now, "yyyy");
+const CityInfo = ({ weatherData, isLoading, getWeather, time, day, month,year, date }) => {
 
   // Memoize the fetch call
   const fetchWeather = useCallback(async () => {
@@ -44,6 +32,15 @@ const CityInfo = () => {
         fontSize={"60px"}
       >
         {weatherData.city}
+      </Text>
+      <Text
+      textAlign={"center"}
+      color={"rgba(60,60,60)"}
+      fontWeight={"bold"}
+      fontSize={"20px"}
+      >
+                {weatherData.country}
+
       </Text>
 
       <Box width={400} height={200}>

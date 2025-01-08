@@ -39,7 +39,7 @@ const Navbar = () => {
                         fontSize={{ base: 22, sm: 28 }}
                         fontWeight="extrabold"
                       >
-                        Try more APIs
+                        Search for a Country
                       </Link>
           ) : (
             <Button
@@ -50,7 +50,7 @@ const Navbar = () => {
               onClick={() =>
                       toaster.create({
                         title: "Log In",
-                        description: "You Must Log In",
+                        description: "You Must Log In first",
                         type: "error",
                         duration: 3500,
                       })}

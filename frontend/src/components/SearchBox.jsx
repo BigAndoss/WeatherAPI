@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { Flex, Input, Button } from "@chakra-ui/react";
-import { useWeatherStore } from "../store/weather.shared.js";
 
-const SearchBox = () => {
-  const setCity = useWeatherStore((state) => state.setCity);
-  const getWeather = useWeatherStore((state) => state.getWeather);
+const SearchBox = ({setC, getWeather}) => {
+
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e) => {
@@ -12,7 +10,8 @@ const SearchBox = () => {
   };
 
   const handleButtonClick = async () => {
-    setCity(inputValue.charAt(0).toUpperCase() + inputValue.slice(1));
+    
+    setC(inputValue.charAt(0).toUpperCase() + inputValue.slice(1));
     setInputValue("");
     getWeather();
   };
@@ -29,7 +28,7 @@ const SearchBox = () => {
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder="Enter city name"
+        placeholder="Search"
         borderColor={"whiteAlpha.100"}
         borderRadius={10}
         bgColor={"whiteAlpha.700"}

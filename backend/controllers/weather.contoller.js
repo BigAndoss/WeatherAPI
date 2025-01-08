@@ -1,11 +1,71 @@
 import Weather from "../models/weather.model.js";
 import City from "../models/city.model.js";
 import mongoose from "mongoose";
-import {ObjectId} from "mongodb";
+import { ObjectId } from "mongodb";
+
+export const getWeatherForCountry = async (req, res) => {
+  try {
+    const { country, date } = req.query;
+
+    // Validate the parameters
+    if (!country || !date) {
+      return res.status(400).json({
+        message: "Country and Date are required.",
+      });
+    }
+
+    const weatherData = await Weather.aggregate([
+      {
+        $match: {
+          date: `${date}T00:00:00Z`,
+        },
+      },
+      {
+        $lookup: {
+          from: "cities",
+          localField: "city",
+          foreignField: "_id",
+          as: "cityInfo",
+        },
+      },
+      {
+        $match: {
+          "cityInfo.country.name": { $regex: new RegExp(country, "i") },
+        },
+      },
+      {
+        $project: {
+          city: { $arrayElemAt: ["$cityInfo.name", 0] },
+          country: { $arrayElemAt: ["$cityInfo.country.name", 0] },
+          temperature: 1,
+          humidity: 1,
+          windSpeed: 1,
+          condition: 1,
+          date: 1,
+        },
+      },
+    ]);
+    // console.log(weatherData)
+    if (!weatherData) {
+      return res.status(404).json({
+        message: `No weather data found on date '${date}'.`,
+      });
+    }
+    if(weatherData.length === 0){
+      console.log("No weather data found for country")
+      return res.status(404).json({
+        message: `No weather data found for country '${country}' on date '${date}'.`,
+      });
+    }
+    res.status(200).json(weatherData);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 export const getWeatherByCityAndDate = async (req, res) => {
   try {
-    const { date,city } = req.query;
+    const { date, city } = req.query;
 
     // Validate the parameters
     if (!city || !date) {
@@ -13,12 +73,14 @@ export const getWeatherByCityAndDate = async (req, res) => {
         message: "City and Date is required.",
       });
     }
-    const cityId = await City.findOne({name: { $regex: new RegExp(city, "i")}})
+    const cityId = await City.findOne({
+      name: { $regex: new RegExp(city, "i") },
+    });
 
     const weatherData = await Weather.findOne({
-      "date": `${date}T00:00:00Z`,
-      "city": cityId.id
-    })
+      date: `${date}T00:00:00Z`,
+      city: cityId.id,
+    });
 
     if (!weatherData) {
       return res.status(404).json({
@@ -27,6 +89,7 @@ export const getWeatherByCityAndDate = async (req, res) => {
     }
     res.status(200).json({
       city: cityId.name,
+      country: cityId.country.name,
       date: weatherData.date,
       temperature: weatherData.temperature,
       condition: weatherData.condition,
@@ -184,7 +247,7 @@ export const getWeatherByCityName = async (req, res) => {
     const cityObjectId = new mongoose.Types.ObjectId(city._id);
 
     const weatherData = await Weather.find({
-      city: "6756b29cf6968f6e71bbbcfb"
+      city: "6756b29cf6968f6e71bbbcfb",
     });
 
     console.log("Query result:", weatherData);
@@ -215,36 +278,6 @@ export const getAllWeather = async (req, res) => {
   }
 };
 
-// GET - Search Weather Data by City ID
-// export const getWeatherByCityId = async (req, res) => {
-//   try {
-//     const { cityId } = req.params;
-
-//     // Validate ObjectId format
-//     if (!mongoose.Types.ObjectId.isValid(cityId)) {
-//       return res.status(400).json({ message: "Invalid city ID format" });
-//     }
-
-//     // Convert to ObjectId
-//     const cityObjectId = new mongoose.Types.ObjectId(cityId);
-
-//     // Find weather data
-//     const weatherData = await Weather.find({ city: cityObjectId })
-//       .populate('city', 'name country');
-
-//     if (!weatherData || weatherData.length === 0) {
-//       return res.status(404).json({
-//         message: "No weather data found for this city ID"
-//       });
-//     }
-
-//     res.status(200).json(weatherData);
-
-//   } catch (error) {
-//     console.error('Error:', error);
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
 export const getWeatherByCityId = async (req, res) => {
   try {
     const { cityId } = req.params;
@@ -297,7 +330,7 @@ export const getWeatherByCityId = async (req, res) => {
 // GET weather record by ID
 export const getWeatherById = async (req, res) => {
   const { date } = req.params;
-console.log(date)
+  console.log(date);
   // Function to validate ISO 8601 format and extract the date
   const isValidISODate = (dateString) => {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/; // Regex for YYYY-MM-DD
@@ -331,7 +364,9 @@ console.log(date)
     }).populate("city");
 
     if (!weatherData || weatherData.length === 0) {
-      return res.status(404).json({ message: "No weather data found for this date." });
+      return res
+        .status(404)
+        .json({ message: "No weather data found for this date." });
     }
 
     // Format the response data
@@ -344,7 +379,9 @@ console.log(date)
     res.status(200).json(formattedData);
   } catch (error) {
     console.error("Error fetching weather data:", error);
-    res.status(500).json({ message: "An error occurred while retrieving weather data." });
+    res
+      .status(500)
+      .json({ message: "An error occurred while retrieving weather data." });
   }
 };
 
@@ -446,36 +483,14 @@ export const getWeatherByDate = async (req, res) => {
 export const getWeatherByCity = async (req, res) => {
   try {
     const weather = await Weather.findOne({
-      city: new ObjectId("6756b29cf6968f6e71bbbcfb")
+      city: new ObjectId("6756b29cf6968f6e71bbbcfb"),
       // date:"2025-01-02T00:00:00Z"
     }).populate("city", "name country");
-    console.log(weather)
+    console.log(weather);
     res.status(200).json(weather);
   } catch (error) {
     res
       .status(500)
       .json({ message: "Error getting weather data", error: error.message });
   }
-}
-
-
-
-// export const getWeatherByCityId0001 = async (req, res) => {
-//   try {
-//     const { cityId } = req.params;
-//     // Get the cityId from the request parameters
-//     //  Find weather data that matches the cityId
-//     const weatherData = await Weather.find({ city: cityId });
-//     if (!weatherData.length) {
-//       return res
-//         .status(404)
-//         .json({ message: "Weather data not found for the specified city" });
-//     }
-//     // Return the result
-    
-//     res.json(weatherData);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Server error" });
-//   }
-// };
+};
