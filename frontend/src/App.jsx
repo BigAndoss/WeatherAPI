@@ -14,7 +14,6 @@ function App() {
     minH={"100vh"}
     backgroundImage="url('/img/background.png')"
     backgroundSize= "cover"
-    
     backgroundPosition="center"
     >
       <Navbar />
