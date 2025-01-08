@@ -19,13 +19,14 @@ const HomePage = () => {
   const year = format(now, "yyyy");
 
   return (
-    <Container>
+    <Container maxW={{ base: "100%", md: "container.md", lg: "container.lg" }}>
       <Flex
-        h={"80vh"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        justifyItems={"center"}
-        flexDir={"column"}
+        minH={{ base: "calc(100vh - 80px)", md: "80vh" }}
+        direction="column"
+        align="center"
+        justify="center"
+        p={{ base: 4, md: 8 }}
+        gap={4}
       >
         <SearchBox setC={setC} getWeather={getWeather} />
         <Flex>

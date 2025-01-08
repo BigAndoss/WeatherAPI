@@ -41,10 +41,17 @@ const APIsPage = () => {
 
         {Array.isArray(weatherData) ? (
           <Grid
-            templateColumns="repeat(3, 1fr)"
+            templateColumns={{
+              base: "1fr",
+              md: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)"
+            }}
             gap={4}
-            overflowY="auto"
-            maxH="80vh"
+            overflowY="scroll"
+            overflowX={"hidden"}
+            maxH={{ base: "70vh", md: "80vh" }}
+            w="full"
+            px={4}
           >
             {weatherData.map((element, index) => (
               <CityInfo

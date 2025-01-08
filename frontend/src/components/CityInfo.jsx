@@ -30,6 +30,8 @@ const CityInfo = ({
       alignItems={"center"}
       justifyContent={"center"}
       justifyItems={"center"}
+      maxW={{ base: "100%", md: "container.md" }}
+      p={{ base: 4, md: 6 }}
     >
       <Text
         className="city-name"
@@ -37,7 +39,7 @@ const CityInfo = ({
         textAlign={"center"}
         color={"rgba(60,60,60)"}
         fontWeight={"bold"}
-        fontSize={"60px"}
+        fontSize={{ base: "3xl", md: "5xl", lg: "6xl" }}
       >
         {weatherData.city}
       </Text>
@@ -50,7 +52,10 @@ const CityInfo = ({
         {weatherData.country}
       </Text>
 
-      <Box width={400} height={200}>
+      <Box 
+        width={{ base: "100%", md: 400 }} 
+        height={{ base: 150, md: 200 }}
+      >
         <Flex alignItems={"center"} justifyContent={"center"} flexDir={"row"}>
           {weatherData?.condition && (
             <Image
